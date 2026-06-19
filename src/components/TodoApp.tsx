@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { TodoForm } from './TodoForm';
 import { TodoList } from './TodoList';
 import { TodoFilter } from './TodoFilter';
-import { TodoForm } from './TodoForm';
 
-export interface Todo {
+export type Todo = {
   id: string;
   text: string;
   completed: boolean;
-}
+};
 
-type Filter = 'all' | 'active' | 'completed';
+export type Filter = 'all' | 'active' | 'completed';
 
 export function TodoApp() {
   const [todos, setTodos] = useState<Todo[]>(() => {
@@ -23,9 +23,8 @@ export function TodoApp() {
   }, [todos]);
 
   const addTodo = (text: string) => {
-    if (text.trim() === '') return;
     const newTodo: Todo = {
-      id: Date.now().toString(), // Simple unique ID generation
+      id: crypto.randomUUID(),
       text,
       completed: false,
     };
@@ -56,9 +55,11 @@ export function TodoApp() {
     <div className="todo-app">
       <h1>Todo List</h1>
       <TodoForm addTodo={addTodo} />
-      <TodoFilter currentFilter={filter} setFilter={setFilter} />
       <TodoList todos={filteredTodos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
-      <p>{remainingTasks} tasks remaining</p>
+      <TodoFilter currentFilter={filter} setFilter={setFilter} />
+      <div className="todo-counter">
+        {remainingTasks} {remainingTasks === 1 ? 'task' : 'tasks'} remaining
+      </div>
     </div>
   );
 }

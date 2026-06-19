@@ -7,7 +7,7 @@ interface TodoItemProps {
   deleteTodo: (id: string) => void;
 }
 
-export const TodoItem: React.FC<TodoItemProps> = ({ todo, toggleTodo, deleteTodo }) => {
+export function TodoItem({ todo, toggleTodo, deleteTodo }: TodoItemProps) {
   return (
     <li className={`todo-item ${todo.completed ? 'completed' : ''}`}>
       <input
@@ -19,4 +19,4 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, toggleTodo, deleteTodo
       <button onClick={() => deleteTodo(todo.id)}>Delete</button>
     </li>
   );
-};
+}
