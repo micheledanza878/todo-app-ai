@@ -1,5 +1,3 @@
-import { TodoApp } from './components/TodoApp';
-
 export default function App() {
-  return <TodoApp />;
+  return <div>App scaffold</div>;
 }
