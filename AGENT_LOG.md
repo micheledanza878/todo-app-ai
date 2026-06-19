@@ -4,4 +4,4 @@ Goal: A todo list web app. Features: add a task, mark complete/incomplete, delet
 
 | # | Agent | Step | Build | Files |
 |---|-------|------|-------|-------|
-| 1 | frontend | Created basic functional components for the todo application: TodoApp, TodoForm, | committed | src/components/TodoApp.tsx, src/components/TodoForm.tsx, src/components/TodoList.tsx, src/components/TodoItem.tsx, src/components/TodoFilter.tsx, src/App.tsx |
+| 1 | frontend | Implemented the basic structure of TodoApp component, including state for todos, | committed | src/components/TodoApp.tsx, src/components/TodoFilter.tsx, src/components/TodoForm.tsx, src/components/TodoItem.tsx, src/components/TodoList.tsx, src/App.tsx |
