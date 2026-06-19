@@ -3,20 +3,18 @@ import { TodoForm } from './TodoForm';
 import { TodoList } from './TodoList';
 import { TodoFilter } from './TodoFilter';
 
-export type Todo = {
+export interface Todo {
   id: string;
   text: string;
   completed: boolean;
-};
+}
 
-export type Filter = 'all' | 'active' | 'completed';
-
-export function TodoApp() {
+export const TodoApp: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>(() => {
     const savedTodos = localStorage.getItem('todos');
     return savedTodos ? JSON.parse(savedTodos) : [];
   });
-  const [filter, setFilter] = useState<Filter>('all');
+  const [filter, setFilter] = useState<'All' | 'Active' | 'Completed'>('All');
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -24,14 +22,14 @@ export function TodoApp() {
 
   const addTodo = (text: string) => {
     const newTodo: Todo = {
-      id: crypto.randomUUID(),
+      id: Date.now().toString(),
       text,
       completed: false,
     };
     setTodos((prevTodos) => [...prevTodos, newTodo]);
   };
 
-  const toggleTodo = (id: string) => {
+  const toggleComplete = (id: string) => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
@@ -44,22 +42,30 @@ export function TodoApp() {
   };
 
   const filteredTodos = todos.filter((todo) => {
-    if (filter === 'active') return !todo.completed;
-    if (filter === 'completed') return todo.completed;
-    return true;
+    if (filter === 'Active') {
+      return !todo.completed;
+    } else if (filter === 'Completed') {
+      return todo.completed;
+    } else {
+      return true; // 'All'
+    }
   });
 
-  const remainingTasks = todos.filter((todo) => !todo.completed).length;
+  const remainingTasks = todos.filter(todo => !todo.completed).length;
 
   return (
     <div className="todo-app">
       <h1>Todo List</h1>
       <TodoForm addTodo={addTodo} />
-      <TodoList todos={filteredTodos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
-      <TodoFilter currentFilter={filter} setFilter={setFilter} />
-      <div className="todo-counter">
-        {remainingTasks} {remainingTasks === 1 ? 'task' : 'tasks'} remaining
+      <TodoFilter currentFilter={filter} onFilterChange={setFilter} />
+      <TodoList
+        todos={filteredTodos}
+        toggleComplete={toggleComplete}
+        deleteTodo={deleteTodo}
+      />
+      <div className="todo-count">
+        {remainingTasks} tasks remaining
       </div>
     </div>
   );
-}
+};

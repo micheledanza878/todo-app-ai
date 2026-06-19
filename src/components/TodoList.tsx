@@ -1,24 +1,28 @@
 import React from 'react';
-import { Todo } from './TodoApp';
 import { TodoItem } from './TodoItem';
+import { Todo } from './TodoApp'; // Import Todo type from TodoApp
 
 interface TodoListProps {
   todos: Todo[];
-  toggleTodo: (id: string) => void;
+  toggleComplete: (id: string) => void;
   deleteTodo: (id: string) => void;
 }
 
-export function TodoList({ todos, toggleTodo, deleteTodo }: TodoListProps) {
+export const TodoList: React.FC<TodoListProps> = ({ todos, toggleComplete, deleteTodo }) => {
   return (
-    <ul className="todo-list">
-      {todos.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          todo={todo}
-          toggleTodo={toggleTodo}
-          deleteTodo={deleteTodo}
-        />
-      ))}
-    </ul>
+    <div className="todo-list">
+      {todos.length === 0 ? (
+        <p>No tasks to display.</p>
+      ) : (
+        todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            toggleComplete={toggleComplete}
+            deleteTodo={deleteTodo}
+          />
+        ))
+      )}
+    </div>
   );
-}
+};

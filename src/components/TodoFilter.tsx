@@ -1,32 +1,24 @@
 import React from 'react';
-import { FilterType } from './TodoApp';
 
 interface TodoFilterProps {
-  currentFilter: FilterType;
-  onFilterChange: (filter: FilterType) => void;
+  currentFilter: 'All' | 'Active' | 'Completed';
+  onFilterChange: (filter: 'All' | 'Active' | 'Completed') => void;
 }
 
 export const TodoFilter: React.FC<TodoFilterProps> = ({ currentFilter, onFilterChange }) => {
+  const filters: Array<'All' | 'Active' | 'Completed'> = ['All', 'Active', 'Completed'];
+
   return (
     <div className="todo-filter">
-      <button
-        onClick={() => onFilterChange('all')}
-        className={currentFilter === 'all' ? 'active' : ''}
-      >
-        All
-      </button>
-      <button
-        onClick={() => onFilterChange('active')}
-        className={currentFilter === 'active' ? 'active' : ''}
-      >
-        Active
-      </button>
-      <button
-        onClick={() => onFilterChange('completed')}
-        className={currentFilter === 'completed' ? 'active' : ''}
-      >
-        Completed
-      </button>
+      {filters.map((filter) => (
+        <button
+          key={filter}
+          className={currentFilter === filter ? 'active' : ''}
+          onClick={() => onFilterChange(filter)}
+        >
+          {filter}
+        </button>
+      ))}
     </div>
   );
 };
