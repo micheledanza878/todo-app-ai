@@ -1,71 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import { TodoForm } from './TodoForm';
-import { TodoList } from './TodoList';
-import { TodoFilter } from './TodoFilter';
 
-export interface Todo {
+export interface Task {
   id: string;
   text: string;
   completed: boolean;
 }
 
-export const TodoApp: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    const savedTodos = localStorage.getItem('todos');
-    return savedTodos ? JSON.parse(savedTodos) : [];
+const LOCAL_STORAGE_KEY = 'react-todo-app-tasks';
+
+const TodoApp: React.FC = () => {
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const storedTasks = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return storedTasks ? JSON.parse(storedTasks) : [];
   });
-  const [filter, setFilter] = useState<'All' | 'Active' | 'Completed'>('All');
 
   useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(tasks));
+  }, [tasks]);
 
-  const addTodo = (text: string) => {
-    const newTodo: Todo = {
-      id: Date.now().toString(),
+  const addTask = (text: string) => {
+    if (text.trim() === '') return;
+    const newTask: Task = {
+      id: Date.now().toString(), // Simple unique ID
       text,
       completed: false,
     };
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
+    setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
-  const toggleComplete = (id: string) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+  const toggleTask = (id: string) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
       )
     );
   };
 
-  const deleteTodo = (id: string) => {
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  const deleteTask = (id: string) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== id));
   };
-
-  const filteredTodos = todos.filter((todo) => {
-    if (filter === 'Active') {
-      return !todo.completed;
-    } else if (filter === 'Completed') {
-      return todo.completed;
-    } else {
-      return true; // 'All'
-    }
-  });
-
-  const remainingTasks = todos.filter(todo => !todo.completed).length;
 
   return (
     <div className="todo-app">
-      <h1>Todo List</h1>
-      <TodoForm addTodo={addTodo} />
-      <TodoFilter currentFilter={filter} onFilterChange={setFilter} />
-      <TodoList
-        todos={filteredTodos}
-        toggleComplete={toggleComplete}
-        deleteTodo={deleteTodo}
-      />
-      <div className="todo-count">
-        {remainingTasks} tasks remaining
-      </div>
+      <h1>Todo App</h1>
+      {/* Placeholder for TodoForm */}
+      <p>Add Task Input Here</p>
+      {/* Placeholder for TodoList */}
+      <p>List of Tasks Here</p>
+      {/* Placeholder for TodoFilter and remaining tasks count */}
+      <p>Filter and Count Here</p>
+
+      <h2>Current Tasks:</h2>
+      <ul>
+        {tasks.map((task) => (
+          <li key={task.id} style={{ textDecoration: task.completed ? 'line-through' : 'none' }}>
+            {task.text} (Completed: {task.completed ? 'Yes' : 'No'})
+            <button onClick={() => toggleTask(task.id)}>Toggle</button>
+            <button onClick={() => deleteTask(task.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+      <button onClick={() => addTask('New Task ' + (tasks.length + 1))}>Add Placeholder Task</button>
     </div>
   );
 };
+
+export default TodoApp;
