@@ -1,11 +1,22 @@
 import React from 'react';
+import { Todo } from './TodoApp';
 
-const TodoItem: React.FC = () => {
+interface TodoItemProps {
+  todo: Todo;
+  toggleTodo: (id: string) => void;
+  deleteTodo: (id: string) => void;
+}
+
+export const TodoItem: React.FC<TodoItemProps> = ({ todo, toggleTodo, deleteTodo }) => {
   return (
-    <div>
-      <h4>TodoItem</h4>
-    </div>
+    <li className={`todo-item ${todo.completed ? 'completed' : ''}`}>
+      <input
+        type="checkbox"
+        checked={todo.completed}
+        onChange={() => toggleTodo(todo.id)}
+      />
+      <span>{todo.text}</span>
+      <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+    </li>
   );
 };
-
-export default TodoItem;
